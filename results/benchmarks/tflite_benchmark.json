@@ -1,0 +1,16 @@
+{
+  "backend": "tflite",
+  "model_path": "results/export/plant_disease_fp16.tflite",
+  "image_path": "/Users/qijiacheng/Desktop/edge-crop-disease-compression/data/plantvillage/Pepper__bell___Bacterial_spot/006adb74-934f-448f-a14f-62181742127b___JR_B.Spot 3395.JPG",
+  "warmup_runs": 10,
+  "benchmark_runs": 100,
+  "latency_ms": {
+    "mean": 2.477343251230195,
+    "median": 2.4781041145324707,
+    "p95": 2.5155081748962402,
+    "p99": 2.6156270503997803,
+    "min": 2.3621669970452785,
+    "max": 2.648875000886619
+  },
+  "fps": 403.65823327204316
+}

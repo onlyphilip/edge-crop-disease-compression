@@ -1,0 +1,76 @@
+project:
+  name: edge-crop-disease-ai
+  seed: 42
+
+paths:
+  data_dir: data/plantvillage
+  working_dir: .
+  checkpoints_dir: checkpoints
+  results_dir: results
+  split_cache_dir: results/splits
+  label_map_path: results/labels.txt
+
+downloads:
+  kaggle_dataset: emmarex/plantdisease
+  extracted_subdir: PlantVillage
+
+data:
+  image_size: 128
+  channels: 3
+  batch_size: 32
+  num_workers: 4
+  val_ratio: 0.1
+  test_ratio: 0.1
+  shuffle: true
+  file_extensions:
+    - .jpg
+    - .jpeg
+    - .png
+
+model:
+  name: mobilenetv2
+  num_classes: null
+  input_shape: [128, 128, 3]
+  weights: imagenet
+  dropout_rate: 0.2
+  train_base: false
+
+train:
+  epochs: 10
+  learning_rate: 0.001
+  optimizer: adam
+  loss: sparse_categorical_crossentropy
+  metrics:
+    - accuracy
+  early_stopping_patience: 5
+  reduce_lr_patience: 2
+  checkpoint_name: mobilenetv2_best.keras
+
+evaluation:
+  average: macro
+  normalize_confusion_matrix: true
+  save_classification_report: true
+
+export:
+  keras_model_path: checkpoints/mobilenetv2_best.keras
+  export_dir: results/export
+  tflite_name_fp32: plant_disease_fp32.tflite
+  tflite_name_fp16: plant_disease_fp16.tflite
+  tflite_name_int8: plant_disease_int8.tflite
+  representative_data_limit: 100
+
+inference:
+  top_k: 3
+  class_names_path: results/labels.txt
+
+benchmark:
+  warmup_runs: 10
+  benchmark_runs: 100
+  use_tflite: true
+  batch_size: 1
+  measure_peak_memory: false
+  measure_energy: true
+
+demo:
+  title: Edge Crop Disease AI
+  description: Streamlit demo for plant disease classification with Keras and TFLite backends.
